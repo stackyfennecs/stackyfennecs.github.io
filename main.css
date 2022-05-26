@@ -24,6 +24,12 @@ body {
     margin-bottom: 60px;
 }
 
+h1 {
+    font-family: 'Space Mono', monospace;
+    font-size: 2.0em;
+    color: var(--primary-color);
+}
+
 h2 {
     font-family: 'Space Mono', monospace;
     font-size: 1.6em;
