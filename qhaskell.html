@@ -1,0 +1,38 @@
+
+<html>
+<head>
+<link href="main.css" rel="stylesheet">
+</head>
+<body>
+<h2 id="does-quantum-programming-exist">Does quantum programming exist?</h2>
+<p>Even though the hardware side of quantum computing is still being worked out, it is interesting to consider what would constitute what I call quantum programming, which is writing algorithms or programs that run on quantum computers. Looking back at the recent history of computing, what really made a difference was programming languages. While computation can be viewed as simply manipulating a state, for example a Turning machine, a programming language is a much more expressive, and practically useful construction. In fact programming itself does not need to have anything to do with computers or the hardware. Computers let us evaluate a program and produce output, but the process of reasoning about computation, and reasoning about a problem is a higher level task. A program is a language which expresses a desired computation, but not necessarily on how to specifically implement it to produce a result. Lots of things not traditionally seen as programs are indeed programs, for example, constructions in mathematics like the real numbers are programs, or even a mathematical proof itself is a program. Using a language to formulate and reason about some idea is programming. Historically, a lot of programming languages slowly developed with connections to the underlying hardware, although as processors become more sophisticated there is a growing disconnect. Programming languages like Haskell are declarative, we state what we want, we say what the desired outcome is, and then the compiler figures out how to implement it. We do not manually manipulate the state of the memory of the computer, or the control flow, in a more traditional way, as historically done in something like C or an assembly language. However in a way, they still seem tied to their classical foundations. Even in Haskell, writing an efficient program requires you to have a little bit of an understanding of how things work under the hood. Could it be that the data structures we use in programs are just classical? <code>lists</code> and <code>folds</code> on the surface might feel very classical, but maybe that is only because we use them with classical objects. Maybe all we need to do is actually just implement proper quantum datastructures and manipulate them with the correct functions.</p>
+<p>At the moment we seem to be at a very rudimentary stage with regards to quantum computation. A lot of quantum computing seems to be playing around with manually manipulating the state or the control flow. A lot of online tools, or current attempts at quantum programming languages, you can just chain together a bunch of quantum gates. This seems a very labourious way to develop quantum algorithms. It is tying the idea of programming with the hardware. However, maybe quantum computing is not such a big deal after all. If computation or programming is just a language, quantum computing is just a nice way to get a speedboost for certain tasks, a bit like a GPU. If programming is a higher order idea, there is no real quantum programming, it’s already just programming.</p>
+<p>So in asking the question what is the analog of declerative programming language but for quantum computers, one answer of course is that we already have it, and its something just like Haskell. We simply need some help from the compiler that can figure out some of the details for us, and we just need some extra datastructures. It could be that quantum computers will simply be like a specialised piece of hardware, just like a GPU. Then of course we only really need some simple DSL like language, and push out tasks that we know will run efficiently on them. So Haskell is already fully compatible, we just need to implement a <code>QState</code> or a <code>QIO</code> monad and then everything is good?</p>
+<p>On one hand this doesn’t feel quite right, quantum behaviour is not necessarily as intuitive. Are things like the quantum fourier transform and amplitude amplification hinting at something more abstract? How would a compiler necessarily produce the corresponding circuits from declaring you want the prime factors. Do we take the normal Haskell program for finding prime factors, and instead of using <code>List</code> plug in <code>QState</code> and hope it works out? Setting up your state to get you exactly what you want does seem pretty tied to the hardware, although maybe I am bad at making an efficient compiler.</p>
+<p>Often people say quantum compiling is just taking an arbitrary unitary matrix <code>U</code> and then producing a series of quantum gates which approximate it. But what makes certain <code>U</code> more interesting? I would say its more like the output of a quantum compiler, and then what people call quantum compiling is more like quantum assembling, it’s just producing the machine code. If we used the <code>QState</code> approach, and implemented unitary gates <code>U</code> as a <code>monoid</code> which has a bunch of options like <code>swap</code> or <code>CNOT</code>, it seems like you would already have the assembly almost, and when would you actually come across an arbitrary unitary matrix? I feel it’s like if you had some more sophisticated quantum compiler that could actually produce <code>U</code>. Of course looking at assembly code and trying to reverse engineer what programming language it came from is also a hard task. Maybe there is some strange non-commutative internal language for some object that is actuallly “quantum programming”.</p>
+<p>On the other, programming should not be tied to the hardware. Programming is just using a language to describe something. So maybe there is really nothing extra to see, and that quantum computing is just some specialised hardware. Quantum programming then probably doesn’t really exist.</p>
+<h2 id="the-quantum-state-monad-in-haskell">The quantum state monad in Haskell</h2>
+<p>Although maybe not actually Haskell, we could imagine that qubits, quantum gates and quantum states could be modelled in Haskell pretty simply. For those that haven’t seen it, in the following code, <code>*</code> means <a href="https://wiki.haskell.org/Kind">kind</a>, which simply means a type. For example: <code>Int :: *</code>. Quantum computing makes use of the following types:</p>
+<pre class="[haskell]"><code>data Basis = Up | Down 
+
+newtype QBit :: *
+newtype QState :: * -&gt; *
+newtype Unitary :: *</code></pre>
+<p>Quantum gates are unitary matrices which act on qubits. There are some usual unitary gates, plus conjugation which is reversing the unitary gate.</p>
+<pre class="[haskell]"><code>instance Monoid Unitary
+cnot :: QBit -&gt; QBit -&gt; Unitary
+rotate :: Integral a =&gt; QBit -&gt; a -&gt; Unitary
+invert :: Unitary -&gt; Unitary</code></pre>
+<p>The quantum state monad takes in a computational basis state, usually denoted <code>Up</code> or <code>|1&gt;</code>, and <code>Down</code> or <code>|0&gt;</code>. We have a special return that lifts a computational basis state into the quantum state.</p>
+<pre class="[haskell]"><code>instance Monad QState
+mQBit :: Basis -&gt; QState QBit 
+applyU :: Unitary -&gt; QState ()
+measure :: QBit -&gt; QState Basis</code></pre>
+<p>Of course to actually run this, we need actual quantum hardware. The alternative is to embed these into a classical Haskell state monad and them simulate them with our classical computers.</p>
+<div>
+    <ul>
+        <a href="index.html">home</a>
+    </ul>   
+</div>
+</body>
+</html>
