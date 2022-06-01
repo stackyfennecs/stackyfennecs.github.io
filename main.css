@@ -62,3 +62,10 @@ a {
     text-decoration: none; 
     font-family: monospace;
 }
+
+li:before {
+    color: var(--secondary-color);
+    content: "#";
+}
+
+
