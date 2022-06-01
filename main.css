@@ -36,11 +36,11 @@ h2 {
     font-size: 1.6em;
     font-style: italic;
     line-height: 1.5em;
-    color : var(--secondary-color)
+    color : var(--secondary-color);
 }
 code { 
     font-family: monospace;
-    color : var(--secondary-color)
+    color : var(--secondary-color);
 }
 
 pre {
