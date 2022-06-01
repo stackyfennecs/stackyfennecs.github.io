@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono&display=swap');
 
 :root {
-    --primary-color:#ff8800;
-    --secondary-color: #ff00ff;
-    --font-color: #000000;
-    --bg-color: #feeffe;
-    --heading-color:  #000000;
-    --contrast-color:#4500b3 ;
+    --primary-color: #ff8800;
+    --secondary-color: #ff84ff;
+    --font-color: #d5bba9;
+    --bg-color: #343034;
+    --heading-color: #000000;
+    --contrast-color: #4500b3;
 }
 
 body {
@@ -36,6 +36,7 @@ h2 {
     font-size: 1.6em;
     font-style: italic;
     line-height: 1.5em;
+    color : var(--secondary-color)
 }
 code { 
     font-family: monospace;
